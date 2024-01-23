@@ -5,11 +5,11 @@
 - A plan for the future with this project is to store the tasks on my server and create a web interface that runs on the server
 
 ### TODO
-[] Basic creating of TODO list 
-[] Basic saving of the list
-[] Basic loading of list
-[] Todo Task functionallity
-[] Get terminal interface to work
+- [ ] Basic creating of TODO list 
+- [ ] Basic saving of the list
+- [ ] Basic loading of list
+- [ ] Todo Task functionallity
+- [ ] Get terminal interface to work
 
 ### Future plans
 1. Web interface running on server
