@@ -17,6 +17,20 @@ class Task(object):
     
     
     def build_task(self, task_data:dict):
+        '''The function "build_task" takes in a dictionary of task data and assigns the values to the
+        corresponding attributes of the object.
+        
+        Parameters
+        ----------
+        task_data : dict
+            The `task_data` parameter is a dictionary that contains the data needed to build a task. It
+        should have the following keys:
+        
+        Returns
+        -------
+            The `self` object is being returned.
+        
+        '''
         
         # BUILD FAIL CHECKS FOR THE ITEMS
         
@@ -160,6 +174,13 @@ class TodoList:
     
     @property
     def tasks(self):
+        '''The function is a property decorator that returns the value of the private attribute __tasks.
+        
+        Returns
+        -------
+            The tasks attribute is being returned.
+        
+        '''
         return self.__tasks
     
     def load_tasks(self) -> TaskList:        
