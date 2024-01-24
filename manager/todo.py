@@ -1,3 +1,5 @@
+#!/usr/bin/env python3.11 
+
 import datetime
 from typing import List, Type
 import json
