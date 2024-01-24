@@ -1,5 +1,6 @@
 import datetime
 from typing import List, Type
+import json
 # This file will have the logic for creation, loading, saving
 
 # This function is just to store the information of the task
@@ -13,6 +14,20 @@ class Task(object):
        # Do these later not now
        self.__reminder:datetime = None
        self.__id: int = None 
+    
+    
+    def build_task(self, task_data:dict):
+        
+        # BUILD FAIL CHECKS FOR THE ITEMS
+        
+        self.__title = task_data['title']
+        self.__description = task_data['description']
+        self.__completed = task_data['complete']
+        self.__due_date = task_data['due-date']
+        self.__id = task_data['id']
+        self.__reminder = task_data['reminder']
+        
+        return self
     
     @property
     def is_completed(self) -> bool:
@@ -141,17 +156,26 @@ class TaskList(List[Type[Task]]):
 class TodoList:
     def __init__(self, file_name: str) -> None:
         self.__tasks: TaskList = TaskList()
-        self.__file_path = f"docs/{file_name}"
+        self.__file_path = f"docs/{file_name}.json"
     
-    def load_tasks(self):        
+    @property
+    def tasks(self):
+        return self.__tasks
+    
+    def load_tasks(self) -> TaskList:        
         '''The function "load_tasks" reads a JSON file and saves the task objects into a variable called
         "self.tasks".
         
         '''
         with open(self.__file_path, "r") as f:
-          # 1. Load Json file
-          # 2. Save Task objects from into self.tasks
-            pass
+            # 1. Load Json file
+            data = json.load(f)
+            tasks = data['tasks']
+            for task in tasks:
+                self.__tasks.append(Task().build_task(task))
+            # 2. Save Task objects from into self.tasks
+        
+        return None
     
     def save_tasks(self):
         '''The function `save_tasks` is used to save tasks into a file in JSON format.
@@ -164,7 +188,7 @@ class TodoList:
     
 
 if __name__ == '__main__':
-    # test = TodoList()
-    # test.tasks.append(Task())
-    # print(type(test.tasks[0]))
+    test = TodoList("template")
+    test.load_tasks()
+    print(test.tasks[1].title)
     pass
