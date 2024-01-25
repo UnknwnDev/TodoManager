@@ -173,7 +173,8 @@ class TodoList:
     def __init__(self, file_name: str) -> None:
         self.__tasks: TaskList = TaskList()
         self.__file_path = f"docs/{file_name}.json"
-    
+        self.load_tasks()
+        
     @property
     def tasks(self):
         '''The function is a property decorator that returns the value of the private attribute __tasks.
