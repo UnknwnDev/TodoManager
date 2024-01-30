@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.11 
 from os import listdir
-from todo import TodoList
+from manager.todo import TodoList
 
 
 # This file will manage the calls creation, loading, and saving of tasks. Nothing else
@@ -30,7 +30,8 @@ class Manager:
             if '.json' in file:
                 name = file.split('.')[0]
                 names.append(name)
-            
+
+        return names
         
             
         
