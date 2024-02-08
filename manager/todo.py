@@ -1,5 +1,6 @@
 #!/usr/bin/env python3.11 
 
+from asyncio import tasks
 import datetime
 from typing import List, Type
 import json
@@ -36,16 +37,17 @@ class Task(object):
         '''
         
         # BUILD FAIL CHECKS FOR THE ITEMS
-        
-        self.__title = task_data['title']
-        self.__description = task_data['description']
-        self.__completed = task_data['complete']
-        self.__due_date = task_data['due-date']
-        self.__id = task_data['id']
-        self.__reminder = task_data['reminder']
-        self.category = file_name
-        
-        return self
+        try:
+            self.__title = task_data['title']
+            self.__description = task_data['description']
+            self.__completed = task_data['complete']
+            self.__due_date = task_data['due-date']
+            self.__id = task_data['id']
+            self.__reminder = task_data['reminder']
+            self.category = file_name
+            return self
+        except Exception as e:
+            print(e)
     
     @property
     def is_completed(self) -> bool:
@@ -222,8 +224,19 @@ class Task(object):
         '''
         self.__id = new_id
     
-     
+    @property
+    def json_dump(self):
+        task = {
+            'id': self.__id,
+            'title': self.__title,
+            'description': self.__description,
+            'complete': self.__completed,
+            'due-date': self.__due_date,
+            'reminder': self.__reminder,    
+        }
         
+        return task
+    
     
     
     
@@ -264,6 +277,27 @@ class TodoList:
         '''
         return self.__tasks
     
+    def create_task(self, _title: str, _descr: str = "", _status: bool = False, _due: datetime = None, _reminder: datetime = None):
+        
+        try:
+            task_data = {}
+            
+            # Building data dictionary
+            task_data['title'] = _title
+            task_data['description'] = _descr
+            task_data['complete'] = _status
+            task_data['due-date'] = _due
+            task_data['reminder'] = _reminder
+            task_data['id'] = len(self.tasks) + 1
+            
+            # Building task and adding it to the tasks list
+            task = Task().build_task(task_data, self.file_name)
+            self.tasks.append(task)
+            
+        except Exception as e:
+            print(e)
+        
+    
     def load_tasks(self) -> TaskList:        
         '''The function "load_tasks" reads a JSON file and saves the task objects into a variable called
         "self.tasks".
@@ -283,6 +317,16 @@ class TodoList:
         '''The function `save_tasks` is used to save tasks into a file in JSON format.
         '''
         # 1. Open file with write / append
+        with open("new_template.json", 'w+') as f:
+            data = {
+                "tasks":[
+                    task.json_dump for task in self.tasks
+                ]
+                
+            }
+            print(data)
+            json.dump(data, f, indent=2)
+            
         # 2. Format tasks into json file
         # 3. Write json data into file
         pass

@@ -8,7 +8,7 @@ class Terminal:
     def __format_task(self, task):
         pass
     
-    def __print_task_info(task: Task):
+    def __print_task_info(self, task: Task):
         print("="*50)
         print(f"Category            : {task.category}")
         print(f"       Title        : {task.title}")

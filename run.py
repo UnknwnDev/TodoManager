@@ -8,7 +8,9 @@ if __name__ == "__main__":
     term = Terminal()
     
     manager.start()
-    todo_lists = manager.TodoList.values
+    todo_lists = manager.TodoList.values()
     
     for list in todo_lists:
-        print(list)
+        term.printf(list.tasks)
+        list.create_task("SAVE TEST")
+        list.save_tasks()
