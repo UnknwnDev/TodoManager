@@ -1,7 +1,6 @@
 #!/usr/bin/env python3.11 
 
-from asyncio import tasks
-import datetime
+from datetime import datetime
 from typing import List, Type
 import json
 # This file will have the logic for creation, loading, saving
@@ -286,8 +285,18 @@ class TodoList:
             task_data['title'] = _title
             task_data['description'] = _descr
             task_data['complete'] = _status
-            task_data['due-date'] = _due
-            task_data['reminder'] = _reminder
+            # Safety checks
+            if _due:
+                task_data['due-date'] = _due.isoformat()
+            else:
+                task_data['due-date'] = None
+                
+            # Safety checks
+            if _reminder:
+                task_data['reminder'] = _reminder.isoformat()
+            else:
+                task_data['reminder'] = None
+            
             task_data['id'] = len(self.tasks) + 1
             
             # Building task and adding it to the tasks list
@@ -303,13 +312,22 @@ class TodoList:
         "self.tasks".
         
         '''
-        with open(self.__file_path, "r") as f:
-            # 1. Load Json file
-            data = json.load(f)
-            tasks = data['tasks']
-            for task in tasks:
-                self.__tasks.append(Task().build_task(task, self.file_name))
-            # 2. Save Task objects from into self.tasks
+        try:
+            # Try to open the file in read-write mode
+            with open(self.__file_path, "r+") as f:
+                # 1. Load JSON file
+                try:
+                    data = json.load(f)
+                    tasks = data['tasks']
+                    for task in tasks:
+                        self.__tasks.append(Task().build_task(task, self.file_name))
+                except json.decoder.JSONDecodeError:
+                    data = {'tasks': []}
+        except FileNotFoundError:
+            # If the file doesn't exist, create a new one
+            with open(self.__file_path, "w+") as f:
+                data = {'tasks': []}
+                print(f"New JSON file '{self.__file_path}' created.")
         
         return None
     
@@ -317,15 +335,18 @@ class TodoList:
         '''The function `save_tasks` is used to save tasks into a file in JSON format.
         '''
         # 1. Open file with write / append
-        with open("new_template.json", 'w+') as f:
-            data = {
-                "tasks":[
-                    task.json_dump for task in self.tasks
-                ]
-                
-            }
-            print(data)
-            json.dump(data, f, indent=2)
+        
+        with open(self.__file_path, 'w+') as f:
+            try:
+                data = {
+                    "tasks":[
+                        task.json_dump for task in self.tasks
+                    ]
+                    
+                }
+                json.dump(data, f, indent=2)
+            except Exception as e:
+                print(e)
             
         # 2. Format tasks into json file
         # 3. Write json data into file
