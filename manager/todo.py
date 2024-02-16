@@ -3,9 +3,8 @@
 from datetime import datetime
 from typing import List, Type
 import json
-# This file will have the logic for creation, loading, saving
 
-# This function is just to store the information of the task
+# The Task class is a basic template for creating tasks.
 class Task(object):
     def __init__(self) -> None:
        self.__completed: bool = False
@@ -355,6 +354,24 @@ class TodoList:
         pass
     
     def delete_task(self, title:str = None, id:int = None):
+        '''The `delete_task` function deletes a task from a list of tasks based on either the task's title
+        or id, and returns the deleted task.
+        
+        Parameters
+        ----------
+        title : str
+            The title parameter is a string that represents the title of the task that you want to delete.
+        If you provide a title, the function will search for a task with that title and delete it.
+        id : int
+            The `id` parameter is an optional integer that represents the unique identifier of a task. If
+        provided, the function will search for a task with the matching `id` and delete it from the list
+        of tasks.
+        
+        Returns
+        -------
+            the task that was deleted from the list of tasks.
+        
+        '''
         show_task = {}
         tasks = self.__tasks
         for task in tasks:
@@ -370,8 +387,8 @@ class TodoList:
         
     
 
-if __name__ == '__main__':
-    test = TodoList("template")
-    test.load_tasks()
-    print(test.tasks[1].title)
-    pass
+# if __name__ == '__main__':
+#     test = TodoList("template")
+#     test.load_tasks()
+#     print(test.tasks[1].title)
+#     pass

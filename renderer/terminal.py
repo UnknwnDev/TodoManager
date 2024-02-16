@@ -68,6 +68,10 @@ class CustomTerminal(Terminal):
         self.manager:Manager = manager
 
     def start(self):
+        '''This function takes user input and performs various commands based on the input, such as showing
+        tasks, creating tasks, deleting tasks, and selecting/deselecting categories.
+        
+        '''
         while True:
             user_input = input("Enter command: ").strip().lower()
             
@@ -136,9 +140,21 @@ class CustomTerminal(Terminal):
         print(end='\r')
 
     def show_task(self, task):
+        '''The function "show_task" takes a task as input and prints its information.
+        
+        Parameters
+        ----------
+        task
+            The task parameter is the task object that you want to display information for.
+        
+        '''
         self.print_task_info(task)
 
     def create_task(self):
+        '''The function `create_task` creates a new task with user-provided inputs and saves it to a todo
+        list.
+        
+        '''
         
         if self.manager.selected_category:
             category = self.manager.selected_category
@@ -160,6 +176,15 @@ class CustomTerminal(Terminal):
         print("Task created successfully.")                
     
     def remove_task(self, target:str):
+        '''The function removes a task from a manager and prints a success message if the task is found,
+        otherwise it prints a failure message.
+        
+        Parameters
+        ----------
+        target : str
+            The "target" parameter is a string that represents the task that needs to be removed.
+        
+        '''
         if self.manager.find_task(target) == 0:
         # print(target)
             print("Tasks removed successfully.")
