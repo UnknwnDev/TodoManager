@@ -1,5 +1,6 @@
 #!/usr/bin/env python3.11 
 from os import listdir
+from turtle import title
 from manager.todo import TodoList
 from renderer.terminal import CustomTerminal
 
@@ -8,8 +9,9 @@ from renderer.terminal import CustomTerminal
 
 class Manager:
     def __init__(self) -> None:
-        self.TodoList = {}
+        self.TodoList:TodoList = {}
         self.term = CustomTerminal(self)
+        self.selected_category:str = None
 
     def __load(self):
         '''The function "start" initializes a dictionary called "TodoList" with instances of the "TodoList"
@@ -24,7 +26,30 @@ class Manager:
         self.__load()
         return self.TodoList.values()
 
+    def find_task(self, target:str):
+        if not self.selected_category:
+            print("Please select a category/file. ( sel/select test )")
+            return -1
+        
+            
+        if target.isdigit():
+            print(f"This is the ID: {target}, you chose")
+            task = self.TodoList[self.selected_category].delete_task(id=int(target))
+            # print(task)
+            print("="*50)
+            self.term.show_task(task)
+            print("="*50)
+        else:
+            print(f"This is the Title: {target}, you chose")
+            
+        return 0
+        
+    def save_task(self, category:str):
+        self.TodoList[category].save_task()
+
+
     def get_tasks_by_category(self, category:str =""):
+        self.__load()
         return self.TodoList[category].tasks
 
     def __get_jsons_names(self):
