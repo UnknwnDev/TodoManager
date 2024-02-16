@@ -6,9 +6,13 @@
 
 ### TODO
 ~~- [ ] Basic creating of TODO list~~ 
+
 ~~- [ ] Basic saving of the list~~
+
 ~~- [ ] Basic loading of list~~
+
 ~~- [ ] Todo Task functionallity~~
+
 ~~- [ ] Get terminal interface to work~~
 
 ### Future plans
