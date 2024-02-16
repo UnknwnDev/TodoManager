@@ -1,6 +1,5 @@
 #!/usr/bin/env python3.11 
 from os import listdir
-from turtle import title
 from manager.todo import TodoList
 from renderer.terminal import CustomTerminal
 

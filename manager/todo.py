@@ -261,8 +261,9 @@ class TaskList(List[Type[Task]]):
 class TodoList:
     def __init__(self, file_name: str) -> None:
         self.__tasks: TaskList = TaskList()
-        self.__file_path = f"docs/{file_name}.json"
-        self.file_name = file_name
+        self.__file_path: str = f"docs/{file_name.lower()}.json"
+        self.file_name: str = file_name.capitalize()
+        self.__json_data = {}
         self.load_tasks()
         
     @property
@@ -282,8 +283,8 @@ class TodoList:
             task_data = {}
             
             # Building data dictionary
-            task_data['title'] = _title
-            task_data['description'] = _descr
+            task_data['title'] = _title.lower()
+            task_data['description'] = _descr.lower()
             task_data['complete'] = _status
             # Safety checks
             if _due:
@@ -318,6 +319,7 @@ class TodoList:
                 # 1. Load JSON file
                 try:
                     data = json.load(f)
+                    self.__json_data = data
                     tasks = data['tasks']
                     for task in tasks:
                         self.__tasks.append(Task().build_task(task, self.file_name))
@@ -351,7 +353,21 @@ class TodoList:
         # 2. Format tasks into json file
         # 3. Write json data into file
         pass
-             
+    
+    def delete_task(self, title:str = None, id:int = None):
+        show_task = {}
+        tasks = self.__tasks
+        for task in tasks:
+            if title:
+                print(task)
+            elif id:
+                if task.id == id:
+                    show_task = task
+                    self.tasks.remove(task)
+        
+        self.save_tasks()
+        return show_task
+        
     
 
 if __name__ == '__main__':
