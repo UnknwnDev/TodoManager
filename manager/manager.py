@@ -32,7 +32,8 @@ class Manager:
         self.__load()
         return self.TodoList.values()
 
-    def find_task(self, target:str):
+    @property
+    def get_list(self) -> TodoList:
         '''The function `find_task` checks if a category is selected and then either prints the ID or the Title
         of the chosen task.
         
@@ -48,21 +49,28 @@ class Manager:
         '''
         if not self.selected_category:
             print("Please select a category/file. ( sel/select test )")
+            return None
+        
+        
+        try:             
+            return self.TodoList[self.selected_category]
+        except Exception:
+            print(f"List: {self.selected_category.capitalize()} DNE")
+            return None
+    
+    
+    def remove_task(self, id:str):
+        if not self.selected_category:
             return -1
         
-            
-        if target.isdigit():
-            print(f"This is the ID: {target}, you chose")
-            task = self.TodoList[self.selected_category].delete_task(id=int(target))
-            # print(task)
-            print("="*50)
-            self.term.show_task(task)
-            print("="*50)
-        else:
-            print(f"This is the Title: {target}, you chose")
-            
-        return 0
+        task = self.TodoList[self.selected_category].delete_task(id=int(id))
+        # print(task)
+        print("="*50)
+        self.term.show_task(task)
+        print("="*50)
         
+        return 0
+      
     def save_task(self, category:str):
         '''The function `save_task` saves a task in a specific category in a TodoList.
         

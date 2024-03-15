@@ -1,6 +1,7 @@
 #!/usr/bin/env python3.11 
 
 from datetime import datetime
+from turtle import title
 from typing import List, Type
 import json
 
@@ -48,7 +49,7 @@ class Task(object):
             print(e)
     
     @property
-    def is_completed(self) -> bool:
+    def completed(self) -> bool:
         '''The `is_completed` function is a property that returns the value of the private `__completed`
         attribute.
         
@@ -59,7 +60,7 @@ class Task(object):
         '''
         return self.__completed
     
-    @is_completed.setter
+    @completed.setter
     def completed(self, flag:bool):
         '''The above function is a setter method that sets the value of the private attribute "__completed"
         to the value of the "flag" parameter.
@@ -305,7 +306,37 @@ class TodoList:
             
         except Exception as e:
             print(e)
+    
+    def edit_task(self, task_id, data: dict):
+        for task in self.tasks:
+            if task.id != task_id:
+                continue
+            for key, value in data.items():
+                if value == None:
+                    continue
+                
+                print(key)
+                match key:
+                    case "title":
+                        task.title = value
+                    case "description":
+                        task.description = value
+                    case "complete":
+                        task.is_completed = value
+                    case "due-date":
+                        task.due_date = value
+                    case "reminder":
+                        task.reminder = value
+                    case "complete":
+                        task.completed = value
+                        
+                    
+            self.save_tasks()
+            return task
         
+                
+                
+            
     
     def load_tasks(self) -> TaskList:        
         '''The function "load_tasks" reads a JSON file and saves the task objects into a variable called
@@ -353,7 +384,7 @@ class TodoList:
         # 3. Write json data into file
         pass
     
-    def delete_task(self, title:str = None, id:int = None):
+    def delete_task(self, id:int = None):
         '''The `delete_task` function deletes a task from a list of tasks based on either the task's title
         or id, and returns the deleted task.
         
@@ -375,12 +406,9 @@ class TodoList:
         show_task = {}
         tasks = self.__tasks
         for task in tasks:
-            if title:
-                print(task)
-            elif id:
-                if task.id == id:
-                    show_task = task
-                    self.tasks.remove(task)
+            if task.id == id:
+                show_task = task
+                self.tasks.remove(task)
         
         self.save_tasks()
         return show_task

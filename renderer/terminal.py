@@ -89,8 +89,11 @@ class CustomTerminal(Terminal):
                             self.printf(list.tasks)
                     else:
                         print("**Note make sure to run dsel if not expected out come**")
-                        print(f"Showing: {self.manager.selected_category.capitalize()}")
-                        self.printf(self.manager.get_tasks_by_category(self.manager.selected_category))
+                        try:
+                            print(f"Showing: {self.manager.selected_category.capitalize()}")
+                            self.printf(self.manager.get_tasks_by_category(self.manager.selected_category))
+                        except Exception:
+                            print(f"The List: {self.manager.selected_category} doesn't exist! Check spelling.")
                         
                 else:
                     category = user_input.split(maxsplit=1)[-1].strip('"').lower()
@@ -118,6 +121,13 @@ class CustomTerminal(Terminal):
                 else:
                     self.remove_task(task[-1].strip('"').lower())
             
+            elif user_input.startswith(("edit")):
+                id = user_input.split(maxsplit=1)[1]
+                id = int(id)
+                
+                self.edit_task(id)
+                    
+                    
             # Selectors
             elif user_input.startswith(('sel', 'select')):
                 category = user_input.split(maxsplit=1)
@@ -133,7 +143,7 @@ class CustomTerminal(Terminal):
             elif user_input.startswith(('dsel', 'deselect', 'de-select')):
                 print(f"You have de-selected {self.manager.selected_category.capitalize()}")
                 self.manager.selected_category = None
-            
+                    
             else:
                 print("Invalid command.")
         
@@ -174,8 +184,32 @@ class CustomTerminal(Terminal):
         self.new_list.create_task(title, description, False, due_date, reminder)
         self.new_list.save_tasks()
         print("Task created successfully.")                
-    
-    def remove_task(self, target:str):
+
+    def edit_task(self, id:int):
+        task_list = self.manager.get_list
+        if task_list:
+            title = input("Enter title: (optional) ")
+            description = input("Enter description (optional): ")
+            due_date = input("Enter due date (optional): ")
+            reminder = input("Enter reminder (optional): ")
+            complete = input("Enter complete (y/n): (optional)").lower()
+            
+            if complete == 'y':
+                complete = True
+            elif complete == 'n':
+                complete = False
+            else:
+                complete = None
+            
+            due_date = dateparser.parse(due_date).isoformat()
+            reminder = dateparser.parse(reminder).isoformat()
+            
+            data = {"title": title, "description":description, "due-date":due_date, "reminder":reminder, "complete": complete}
+            print(data)
+            task_list.edit_task(id, data)
+            print("Task changed successfully.") 
+
+    def remove_task(self, id:int):
         '''The function removes a task from a manager and prints a success message if the task is found,
         otherwise it prints a failure message.
         
@@ -185,10 +219,13 @@ class CustomTerminal(Terminal):
             The "target" parameter is a string that represents the task that needs to be removed.
         
         '''
-        if self.manager.find_task(target) == 0:
-        # print(target)
+        task_list = self.manager.get_list
+        if  task_list:
+        # print(id)
+            print(f"This is the ID: {id}, you chose")   
+            # task_list.delete_task()
+            self.manager.remove_task(id)
             print("Tasks removed successfully.")
-        else:
-            print("Faild to remove task.")
+
             
         
