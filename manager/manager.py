@@ -2,7 +2,7 @@
 from os import listdir
 from manager.todo import TodoList
 from renderer.terminal import CustomTerminal
-
+from renderer.gui.app import App
 
 # This file will manage the calls creation, loading, and saving of tasks. Nothing else
 
@@ -10,6 +10,7 @@ class Manager:
     def __init__(self) -> None:
         self.TodoList:TodoList = {}
         self.term = CustomTerminal(self)
+        self.app = App(self)
         self.selected_category:str = None
 
     def __load(self):
@@ -146,6 +147,8 @@ class Manager:
         self.__load()
         if not gui:
             self.term.start()
+        else: 
+            self.app.mainloop()
         
 
 # if __name__ == "__main__":

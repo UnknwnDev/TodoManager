@@ -1,7 +1,6 @@
 #!/usr/bin/env python3.11 
 
 from datetime import datetime
-from turtle import title
 from typing import List, Type
 import json
 
@@ -312,7 +311,7 @@ class TodoList:
             if task.id != task_id:
                 continue
             for key, value in data.items():
-                if value == None:
+                if value is None:
                     continue
                 
                 print(key)
