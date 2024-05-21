@@ -47,6 +47,17 @@ class Task(object):
         except Exception as e:
             print(e)
     
+    
+    def to_dict(self):
+        return {
+            "title": self.__title,
+            "description": self.__description,
+            "complete": self.__completed,
+            "due-date": self.__due_date.isoformat() if self.__due_date else None,
+            "reminder": self.__reminder.isoformat() if self.__reminder else None
+        }
+
+    
     @property
     def completed(self) -> bool:
         '''The `is_completed` function is a property that returns the value of the private `__completed`
@@ -276,6 +287,13 @@ class TodoList:
         '''
         return self.__tasks
     
+    
+    def to_dict(self):
+        return {
+            "tasks": [task.to_dict() for task in self.tasks],
+            "file_name": self.file_name
+        }
+    
     def create_task(self, _title: str, _descr: str = "", _status: bool = False, _due: datetime = None, _reminder: datetime = None):
         
         try:
@@ -379,9 +397,6 @@ class TodoList:
             except Exception as e:
                 print(e)
             
-        # 2. Format tasks into json file
-        # 3. Write json data into file
-        pass
     
     def delete_task(self, id:int = None):
         '''The `delete_task` function deletes a task from a list of tasks based on either the task's title
