@@ -1,8 +1,5 @@
-#!/usr/bin/env python3.11
-# from manager.manager import Manager
-from renderer.terminal import Terminal
-
+from manager.manager import Manager
 
 if __name__ == "__main__":
-    term = Terminal()
-    term.run()
+    manager = Manager()
+    manager.run()
